@@ -22,7 +22,7 @@ function Home({ navigation }) {
                 <Text style={styles.text}>Driver</Text>
             </TouchableOpacity>
             <Text style={{marginTop: 30, fontWeight: 'bold'}}>OR</Text>
-            <TouchableOpacity style={styles.btn}  onPress={() => navigation.navigate("Signup", { type:'client' })}>
+            <TouchableOpacity style={styles.btn}  onPress={() => navigation.navigate("Signin", { type:'client' })}>
                 <Text style={styles.text}>Client</Text>
             </TouchableOpacity>
         </SafeAreaView>

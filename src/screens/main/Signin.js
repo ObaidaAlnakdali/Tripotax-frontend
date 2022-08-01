@@ -13,7 +13,7 @@ const signinImage = require('../../assets/image/signin.png');
 // Import vector icons
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-function Signin({route}) {
+function Signin({navigation, route}) {
   const {type} = route.params;
   return (
     <SafeAreaView style={styles.Container}>
@@ -61,10 +61,16 @@ function Signin({route}) {
       >
         <Icon name="google" size={30} color="#fff" />
       </TouchableOpacity>
-      <Text style={styles.footerText}>
-        Already have an account
-        <Text style={[styles.textOrang, {fontWeight: 'bold'}]}> Signup</Text>
-      </Text>
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>Don’t Have an account</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('Signup', {type: type})}>
+          <Text style={[styles.textOrang, {fontWeight: 'bold', fontSize: 10}]}>
+            {' '}
+            Signup
+          </Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -131,9 +137,13 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 100,
     marginTop: 50,
   },
+  footer: {
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    marginTop: 40,
+  },
   footerText: {
     fontSize: 10,
-    marginTop: 40,
   },
 });
 
