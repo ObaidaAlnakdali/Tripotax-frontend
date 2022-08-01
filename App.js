@@ -7,60 +7,48 @@
  */
 
 import React, {useEffect} from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {StyleSheet} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import Home from './src/screens/main/Home';
+import Signin from './src/screens/main/Signin';
+import Signup from './src/screens/main/Signup';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import SplashScreen from 'react-native-splash-screen'
+const Stack = createNativeStackNavigator();
 
-const App: () => Node = () => {
-
+const App = () => {
   useEffect(() => {
     SplashScreen.hide();
-  }, [])
+  }, []);
 
-    return (
-      <SafeAreaView >
-        <Text style={styles.sectionContainer}>Obaida Hani Alnakdali</Text>
-
-        <Text style={styles.sectionContainer}>Obaida Hani Alnakdali</Text>
-      </SafeAreaView>
-    );
-
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{title: 'Tripotax'}}
+        />
+        <Stack.Screen
+          name="Signin"
+          component={Signin}
+          options={{title: 'Tripotax'}}
+        />
+        <Stack.Screen
+          name="Signup"
+          component={Signup}
+          options={{title: 'Tripotax'}}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-    fontSize: 24,
-    fontWeight: '700',
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  Container: {
+    flex: 1,
+    backgroundColor: 'white',
   },
 });
 
