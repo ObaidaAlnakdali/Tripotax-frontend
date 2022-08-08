@@ -22,11 +22,11 @@ function Home({ navigation }) {
                 <Text style={styles.text}>Driver</Text>
             </TouchableOpacity>
             <Text style={{marginTop: 30, fontWeight: 'bold'}}>OR</Text>
-            <TouchableOpacity style={styles.btn}  onPress={() => navigation.navigate("Signin", { type:'client' })}>
-                <Text style={styles.text}>Client</Text>
+            <TouchableOpacity style={styles.btn}  onPress={() => navigation.navigate("Signin", { type:'user' })}>
+                <Text style={styles.text}>User</Text>
             </TouchableOpacity>
         </SafeAreaView>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         paddingVertical: 40,
         justifyContent:'center',
         borderRadius: 35 ,
-        borderColor: '#FFC12D',    
+        borderColor: '#FFC12D',
     },
     text: {
         color: '#787878',

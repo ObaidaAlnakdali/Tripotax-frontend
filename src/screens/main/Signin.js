@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,34 +7,43 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Dimensions,
 } from 'react-native';
-import {Dimensions} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const signinImage = require('../../assets/image/signin.png');
 // Import vector icons
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AuthContext from '../../context/AuthContext';
+import axios from 'axios';
 
 function Signin({navigation, route}) {
   const {type} = route.params;
+  const [email, onChangeEmail] = useState('');
+  const [password, onChangePassword] = useState('');
+  const {signin} = useContext(AuthContext);
+
   return (
     <SafeAreaView style={styles.Container}>
       <Text style={styles.title}>
-        <Text style={styles.textOrang}>S</Text>ignin
+        <Text style={styles.textOrang}> {type[0].toUpperCase()}</Text>
+        {type.substring(1)}
+        <Text style={styles.textOrang}> S</Text>ignin
       </Text>
       <Image style={styles.image} source={signinImage} />
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>Email</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangeEmail}
+          value={email}
         />
       </View>
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>Password</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangePassword}
+          value={password}
         />
       </View>
       <Text style={[styles.textOrang, {marginTop: 10, fontSize: 10}]}>
@@ -42,8 +51,7 @@ function Signin({navigation, route}) {
       </Text>
       <TouchableOpacity
         style={styles.btn}
-        //onPress={() => navigation.navigate('Signin', {type: 'driver'})}
-      >
+        onPress={() => signin(email, password, type)}>
         <Text style={styles.btnText}>Signin</Text>
       </TouchableOpacity>
       <View style={styles.boxLine}>

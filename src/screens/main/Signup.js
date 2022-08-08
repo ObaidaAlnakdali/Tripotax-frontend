@@ -1,69 +1,81 @@
-import React from 'react';
+import React, {useState, useContext} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
   View,
   TextInput,
-  Image,
   TouchableOpacity,
+  SyncStorage,
+  Dimensions,
 } from 'react-native';
-import {Dimensions} from 'react-native';
-const signinImage = require('../../assets/image/signin.png');
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // Import vector icons
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AuthContext from '../../context/AuthContext';
+import axios from 'axios';
 
 function Signup({navigation, route}) {
   const {type} = route.params;
+  const [firstName, onChangeFirstName] = useState('');
+  const [middleName, onChangeMiddleName] = useState('');
+  const [lastName, onChangeLastName] = useState('');
+  const [email, onChangeEmail] = useState('');
+  const [password, onChangePassword] = useState('');
+  const {signup} = useContext(AuthContext);
+
   return (
     <SafeAreaView style={styles.Container}>
       <Text style={styles.title}>
-        <Text style={styles.textOrang}>S</Text>ignup
+        <Text style={styles.textOrang}> {type[0].toUpperCase()}</Text>
+        {type.substring(1)}
+        <Text style={styles.textOrang}> S</Text>ignup
       </Text>
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>First name</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangeFirstName}
+          value={firstName}
         />
       </View>
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>Middle name</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangeMiddleName}
+          value={middleName}
         />
       </View>
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>Last name</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangeLastName}
+          value={lastName}
         />
       </View>
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>Email</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangeEmail}
+          value={email}
         />
       </View>
       <View style={styles.inputField}>
         <Text style={styles.inputTitle}>Password</Text>
         <TextInput
           style={styles.inputTxt}
-          // onChangeText={text => onChangeText(text)}
-          // value={value}
+          onChangeText={onChangePassword}
+          value={password}
         />
       </View>
       <TouchableOpacity
         style={styles.btn}
-        //onPress={() => navigation.navigate('Signin', {type: 'driver'})}
-      >
+        onPress={() =>
+          signup(firstName, middleName, lastName, email, password, type)
+        }>
         <Text style={styles.btnText}>Signup</Text>
       </TouchableOpacity>
       <View style={styles.boxLine}>
