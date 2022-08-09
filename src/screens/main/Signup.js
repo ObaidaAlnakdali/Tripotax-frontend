@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     display: 'flex',
-    flexDirection: 'row-reverse',
+    flexDirection: 'row',
     marginTop: 40,
   },
   footerText: {

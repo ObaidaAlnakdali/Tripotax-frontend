@@ -11,6 +11,7 @@ export const AuthProvider = ({children}) => {
   const [userData, setUserData] = useState(null);
 
   const signup = (firstName, middleName, lastName, email, password, type) => {
+    setIsLoading(true);
     let form = {
       firstName: firstName.trim(),
       middleName: middleName.trim(),
@@ -18,16 +19,16 @@ export const AuthProvider = ({children}) => {
       email: email.trim(),
       password: password.trim(),
     };
-    console.log(form);
     axios
-      .post(`http://192.168.0.106:8000/api/${type}/signup`, form)
-      .then(res => {
-        console.log(res.data);
-        AsyncStorage.setItem('token', res.data.Token);
+      .post(`http://192.168.0.115:8000/api/${type}/signup`, form)
+      .then(async res => {
+        console.log('Data', res.data);
+        AsyncStorage.setItem('token', res.data.token);
         AsyncStorage.setItem('type', res.data.type);
         AsyncStorage.setItem('id', res.data[type].id);
-        setUserToken(res.data.Token);
+        setUserToken(res.data.token);
         setUserType(res.data.type);
+        setIsLoading(false);
       })
       .catch(err => console.log(err));
   };
@@ -41,10 +42,10 @@ export const AuthProvider = ({children}) => {
       .post(`http://192.168.0.115:8000/api/${type}/signin`, form)
       .then(res => {
         console.log(res.data);
-        AsyncStorage.setItem('token', res.data.Token);
+        AsyncStorage.setItem('token', res.data.token);
         AsyncStorage.setItem('type', res.data.type);
         AsyncStorage.setItem('id', res.data.id);
-        setUserToken(res.data.Token);
+        setUserToken(res.data.token);
         setUserType(res.data.type);
         setIsLoading(false);
       })
@@ -81,7 +82,8 @@ export const AuthProvider = ({children}) => {
       axios
         .get(`http://192.168.0.115:8000/api/${type}/${id}`)
         .then(res => {
-          setUserData(res.data);
+          console.log(res.data.response);
+          setUserData(res.data.response);
         })
         .catch(err => console.log(err));
     }
@@ -91,6 +93,10 @@ export const AuthProvider = ({children}) => {
     isLoggedIn();
     getUserData();
   }, []);
+
+  useEffect(() => {
+    getUserData();
+  }, [userToken]);
 
   return (
     <AuthContext.Provider

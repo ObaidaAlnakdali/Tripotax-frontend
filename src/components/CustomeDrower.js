@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext} from 'react';
+import React, {useContext, useEffect} from 'react';
 import {
   SafeAreaView,
   View,
@@ -19,27 +19,30 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const CustomDrawer = props => {
-  const {logout} = useContext(AuthContext);
+  const {logout, userData} = useContext(AuthContext);
+  const Image_Http_URL = {
+    uri: `http://192.168.0.115:8000/images/${userData?.personalImage}`,
+  };
 
   return (
     <SafeAreaView style={{flex: 1}}>
       <DrawerContentScrollView
         {...props}
-        contentContainerStyle={{backgroundColor: '#8200d6'}}>
-        <ImageBackground
-          source={require('../assets/image/menu-bg.jpeg')}
-          style={{padding: 20}}>
+        contentContainerStyle={{backgroundColor: '#FFC12D'}}>
+        <View
+          style={{
+            paddingHorizontal: 40,
+            paddingTop: 80,
+            paddingBottom: 20,
+            backgroundColor: '#FFC12D',
+          }}>
           <Image
-            source={require('../assets/image/user-profile.jpg')}
+            source={Image_Http_URL}
             style={{height: 80, width: 80, borderRadius: 40, marginBottom: 10}}
           />
-          <Text style={styles.textTitle}>John Doe</Text>
-          <View style={{flexDirection: 'row'}}>
-            <Text style={styles.text}>280 Coins</Text>
-            <FontAwesome5 name="coins" size={14} color="#fff" />
-          </View>
-        </ImageBackground>
-        <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 10}}>
+          <Text style={styles.textTitle}>{userData?.fullName}</Text>
+        </View>
+        <View style={{flex: 1, backgroundColor: '#fff', paddingTop: 40}}>
           <DrawerItemList {...props} />
         </View>
       </DrawerContentScrollView>
@@ -65,7 +68,7 @@ const CustomDrawer = props => {
 
 const styles = StyleSheet.create({
   textTitle: {
-    color: '#fff',
+    color: '#3E4958',
     fontSize: 18,
     fontFamily: 'Roboto-Medium',
     marginBottom: 5,
