@@ -28,6 +28,7 @@ function AppNav() {
       ) : (
         <UserStack />
       )}
+      {console.log(userType)}
     </NavigationContainer>
   );
 }

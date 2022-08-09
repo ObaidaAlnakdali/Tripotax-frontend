@@ -7,7 +7,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({children}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [userToken, setUserToken] = useState(null);
-  const [userType, setUserType] = useState('');
+  const [userType, setUserType] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   const signup = (firstName, middleName, lastName, email, password, type) => {
     let form = {
@@ -64,15 +65,31 @@ export const AuthProvider = ({children}) => {
     try {
       setIsLoading(true);
       let token = await AsyncStorage.getItem('token');
+      let type = await AsyncStorage.getItem('type');
       setUserToken(token);
+      setUserType(type);
       setIsLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getUserData = async () => {
+    let id = await AsyncStorage.getItem('id');
+    let type = await AsyncStorage.getItem('type');
+    if (id !== null || id !== undefined) {
+      axios
+        .get(`http://192.168.0.115:8000/api/${type}/${id}`)
+        .then(res => {
+          setUserData(res.data);
+        })
+        .catch(err => console.log(err));
+    }
+  };
+
   useEffect(() => {
     isLoggedIn();
+    getUserData();
   }, []);
 
   return (
@@ -86,6 +103,7 @@ export const AuthProvider = ({children}) => {
         isLoading,
         userToken,
         userType,
+        userData,
       }}>
       {children}
     </AuthContext.Provider>
