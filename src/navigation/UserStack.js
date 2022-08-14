@@ -7,6 +7,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 
 import CustomDrawer from '../components/CustomeDrower';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import TabNavugate from './TabNavugate';
 
 const Drawer = createDrawerNavigator();
 
@@ -26,7 +27,7 @@ function UserStack() {
       }}>
       <Drawer.Screen
         name="Home"
-        component={UserDashboard}
+        component={TabNavugate}
         options={{
           drawerIcon: ({color}) => (
             <Ionicons name="home-outline" size={22} color={color} />

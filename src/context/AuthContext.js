@@ -9,6 +9,7 @@ export const AuthProvider = ({children}) => {
   const [userToken, setUserToken] = useState(null);
   const [userType, setUserType] = useState(null);
   const [userData, setUserData] = useState(null);
+  const IP = '192.168.0.115';
 
   const signup = (firstName, middleName, lastName, email, password, type) => {
     setIsLoading(true);
@@ -20,7 +21,7 @@ export const AuthProvider = ({children}) => {
       password: password.trim(),
     };
     axios
-      .post(`http://192.168.0.115:8000/api/${type}/signup`, form)
+      .post(`http://${IP}:8000/api/${type}/signup`, form)
       .then(async res => {
         console.log('Data', res.data);
         AsyncStorage.setItem('token', res.data.token);
@@ -39,7 +40,7 @@ export const AuthProvider = ({children}) => {
     console.log(form);
     //console.log(process.env.URL);
     axios
-      .post(`http://192.168.0.115:8000/api/${type}/signin`, form)
+      .post(`http://${IP}:8000/api/${type}/signin`, form)
       .then(res => {
         console.log(res.data);
         AsyncStorage.setItem('token', res.data.token);
@@ -80,9 +81,9 @@ export const AuthProvider = ({children}) => {
     let type = await AsyncStorage.getItem('type');
     if (id !== null || id !== undefined) {
       axios
-        .get(`http://192.168.0.115:8000/api/${type}/${id}`)
+        .get(`http://${IP}:8000/api/${type}/${id}`)
         .then(res => {
-          console.log(res.data.response);
+          console.log('user test', res.data.response);
           setUserData(res.data.response);
         })
         .catch(err => console.log(err));
@@ -92,6 +93,7 @@ export const AuthProvider = ({children}) => {
   useEffect(() => {
     isLoggedIn();
     getUserData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -110,6 +112,7 @@ export const AuthProvider = ({children}) => {
         userToken,
         userType,
         userData,
+        IP,
       }}>
       {children}
     </AuthContext.Provider>

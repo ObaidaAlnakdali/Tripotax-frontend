@@ -9,12 +9,10 @@ import {
   View,
   Dimensions,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 const signinImage = require('../../assets/image/signin.png');
 // Import vector icons
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AuthContext from '../../context/AuthContext';
-import axios from 'axios';
 
 function Signin({navigation, route}) {
   const {type} = route.params;
@@ -95,16 +93,16 @@ const styles = StyleSheet.create({
     color: '#5C5C5C',
     fontWeight: 'bold',
   },
+  image: {
+    width: 200,
+    height: 100,
+    marginBottom: 20,
+  },
   inputTxt: {
     height: 45,
     paddingHorizontal: 20,
     borderRadius: 15,
     backgroundColor: '#E9EBEC',
-  },
-  image: {
-    width: 200,
-    height: 100,
-    marginBottom: 20,
   },
   inputField: {
     width: Dimensions.get('window').width - 100,

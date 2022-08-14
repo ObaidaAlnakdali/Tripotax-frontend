@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   StyleSheet,
-  ImageBackground,
   Image,
   TouchableOpacity,
 } from 'react-native';
@@ -16,12 +15,12 @@ import {
 import AuthContext from '../context/AuthContext';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+//import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const CustomDrawer = props => {
-  const {logout, userData} = useContext(AuthContext);
+  const {logout, userData, IP} = useContext(AuthContext);
   const Image_Http_URL = {
-    uri: `http://192.168.0.115:8000/images/${userData?.personalImage}`,
+    uri: `http://${IP}:8000/images/${userData?.personalImage}`,
   };
 
   return (
@@ -47,12 +46,6 @@ const CustomDrawer = props => {
         </View>
       </DrawerContentScrollView>
       <View style={{padding: 20, borderTopWidth: 1, borderTopColor: '#ccc'}}>
-        {/* <TouchableOpacity onPress={() => {}} style={{paddingVertical: 15}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Ionicons name="share-social-outline" size={22} />
-            <Text style={styles.text}>Tell a Friend</Text>
-          </View>
-        </TouchableOpacity> */}
         <TouchableOpacity
           onPress={() => logout()}
           style={{paddingVertical: 15}}>

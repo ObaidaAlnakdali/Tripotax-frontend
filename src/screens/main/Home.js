@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     btn: {
-        borderWidth: 2,
         marginTop: 30,
         paddingHorizontal: 80,
         paddingVertical: 40,
         justifyContent:'center',
+        borderWidth: 2,
         borderRadius: 35 ,
         borderColor: '#FFC12D',
     },

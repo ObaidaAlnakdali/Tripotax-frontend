@@ -14,7 +14,7 @@ function AppNav() {
   if (isLoading) {
     return (
       <View style={styles.Container}>
-        <ActivityIndicator size={'large'} />
+        <ActivityIndicator size={'large'} color="#FFC12D" />
       </View>
     );
   }
