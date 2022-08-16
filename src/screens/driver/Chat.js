@@ -11,11 +11,14 @@ import {
   TextInput,
 } from 'react-native';
 import AuthContext from '../../context/AuthContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import Icons from 'react-native-vector-icons/Ionicons';
+import axios from 'axios';
 
 function Chat({navigation, route}) {
-  const {messages, user} = route.params;
+  const {messages, user, idConversation} = route.params;
+  const [messagesReal, setMessagesReal] = useState(messages);
   const {IP} = useContext(AuthContext);
   const [message, setMessage] = useState('');
 
@@ -47,6 +50,24 @@ function Chat({navigation, route}) {
     />
   );
 
+  const sendMassage = async () => {
+    let id = await AsyncStorage.getItem('id');
+    let form = {
+      sender: id,
+      senderRef: 'Driver',
+      conversation: idConversation,
+      content: message,
+    };
+    axios
+      .post(`http://${IP}:8000/api/message`, form)
+      .then(async res => {
+        console.log('Data', res.data.response);
+        setMessagesReal(current => [...current, res.data.response]);
+        setMessage('');
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <SafeAreaView style={styles.Container}>
       <View style={styles.item}>
@@ -70,12 +91,14 @@ function Chat({navigation, route}) {
         </View>
       </View>
       <Text style={styles.itemDate}>
-        {new Date(messages[0].createdAt).toLocaleDateString().substring(0, 11)}
+        {new Date(messagesReal[0].createdAt)
+          .toLocaleDateString()
+          .substring(0, 11)}
       </Text>
       <View style={styles.Container}>
         <FlatList
           style={styles.body}
-          data={messages}
+          data={messagesReal}
           renderItem={renderItem}
           keyExtractor={item => item.id}
         />
@@ -89,7 +112,7 @@ function Chat({navigation, route}) {
             value={message}
           />
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => sendMassage()}>
           <View style={styles.sendIcon}>
             <Icons
               style={styles.leftIcon}

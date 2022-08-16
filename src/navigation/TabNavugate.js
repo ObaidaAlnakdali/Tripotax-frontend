@@ -1,11 +1,8 @@
 import React from 'react';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import UserDashboard from '../screens/user/UserDashboard';
-import Chat from '../screens/user/Chat';
-import Drivers from '../screens/user/Drivers';
 import DriverStackNavigate from './DriverStackNavigate';
 import OrderStackNavigation from './OrderStackNavigation';
-import {Text} from 'react-native';
+import UserChatStack from './UserChatStack';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -17,6 +14,7 @@ function TabNavugate() {
         tabBarActiveTintColor: '#5C5C5C',
         tabBarLabelStyle: {fontSize: 12},
         borderBottomColor: 'red',
+        tabBarIndicatorStyle: {backgroundColor: '#FFC12D'},
       }}>
       <Tab.Screen
         name="Order"
@@ -24,8 +22,8 @@ function TabNavugate() {
         options={{tabBarLabel: 'Order'}}
       />
       <Tab.Screen
-        name="Chat"
-        component={Chat}
+        name="UserChatStack"
+        component={UserChatStack}
         options={{tabBarLabel: 'Chat'}}
       />
       <Tab.Screen

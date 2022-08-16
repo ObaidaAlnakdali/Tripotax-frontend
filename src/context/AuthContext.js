@@ -10,7 +10,7 @@ export const AuthProvider = ({children}) => {
   const [userType, setUserType] = useState(null);
   const [userData, setUserData] = useState(null);
   const [orderData, setOrderData] = useState({});
-  const IP = '192.168.0.126';
+  const IP = '192.168.0.132';
 
   const signup = (firstName, middleName, lastName, email, password, type) => {
     setIsLoading(true);
