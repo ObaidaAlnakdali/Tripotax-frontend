@@ -9,7 +9,8 @@ export const AuthProvider = ({children}) => {
   const [userToken, setUserToken] = useState(null);
   const [userType, setUserType] = useState(null);
   const [userData, setUserData] = useState(null);
-  const IP = '192.168.0.115';
+  const [orderData, setOrderData] = useState({});
+  const IP = '192.168.0.126';
 
   const signup = (firstName, middleName, lastName, email, password, type) => {
     setIsLoading(true);
@@ -108,6 +109,8 @@ export const AuthProvider = ({children}) => {
         logout,
         setUserToken,
         setUserType,
+        setOrderData,
+        orderData,
         isLoading,
         userToken,
         userType,

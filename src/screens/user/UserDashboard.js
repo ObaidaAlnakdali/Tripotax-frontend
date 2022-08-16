@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Platform,
   TextInput,
+  FlatList,
 } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,8 +20,8 @@ import axios from 'axios';
 
 import Icon from 'react-native-vector-icons/Feather';
 
-function UserDashboard() {
-  const {logout, IP} = useContext(AuthContext);
+function UserDashboard({navigation}) {
+  const {IP, setOrderData} = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -64,16 +65,23 @@ function UserDashboard() {
       time: timeTest,
       from: from,
       to: to,
-      user: id,
+      //user: id,
     };
-    axios
-      .post(`http://${IP}:8000/api/order/${id}`, form)
-      .then(res => {
-        console.log(res.data.NewOrders);
-        setOrders(orders.unshift(res.data.NewOrders));
-        setModalVisible(!modalVisible);
-      })
-      .catch(err => console.log(err));
+
+    setOrders(current => [...current, form]);
+    setModalVisible(!modalVisible);
+    setDateTest('N/A');
+    setTimeTest('N/A');
+    setFrom('');
+    setTo('');
+    // axios
+    //   .post(`http://${IP}:8000/api/order/${id}`, form)
+    //   .then(res => {
+    //     console.log(res.data.NewOrders);
+    //     setOrders(orders.unshift(res.data.NewOrders));
+    //     setModalVisible(!modalVisible);
+    //   })
+    //   .catch(err => console.log(err));
   };
 
   const getOrders = async () => {
@@ -86,6 +94,48 @@ function UserDashboard() {
       })
       .catch(err => console.log(err));
   };
+
+  const selectOrder = (date, time, from, to) => {
+    let form = {
+      date: date,
+      time: time,
+      from: from,
+      to: to,
+    };
+    setOrderData(form);
+    navigation.navigate('DriversList');
+  };
+
+  const Item = ({date, time, from, to}) => (
+    <TouchableOpacity onPress={() => selectOrder(date, time, from, to)}>
+      <View style={styles.item}>
+        <View>
+          <View style={styles.itemDataView}>
+            <Text style={styles.title}>From :</Text>
+            <Text style={styles.data}>{from}</Text>
+          </View>
+          <View style={styles.itemDataView}>
+            <Text style={styles.title}>To :</Text>
+            <Text style={styles.data}>{to}</Text>
+          </View>
+        </View>
+        <View>
+          <View style={styles.itemDataView}>
+            <Text style={styles.title}>Date :</Text>
+            <Text style={styles.data}>{date}</Text>
+          </View>
+          <View style={styles.itemDataView}>
+            <Text style={styles.title}>Time :</Text>
+            <Text style={styles.data}>{time}</Text>
+          </View>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+
+  const renderItem = ({item}) => (
+    <Item date={item?.date} time={item?.time} from={item?.from} to={item?.to} />
+  );
 
   useEffect(() => {
     //getOrders();
@@ -164,11 +214,19 @@ function UserDashboard() {
           </View>
         </View>
       </Modal>
-      <ScrollView>
-        <TouchableOpacity onPress={() => logout()}>
-          <Text>UserDashboard</Text>
-        </TouchableOpacity>
-      </ScrollView>
+
+      {orders.length === 0 ? (
+        <View>
+          <Text style={styles.noData}>No Active Orders</Text>
+        </View>
+      ) : (
+        <FlatList
+          style={styles.flatList}
+          data={orders}
+          renderItem={renderItem}
+          keyExtractor={item => item.id}
+        />
+      )}
 
       <TouchableOpacity
         onPress={() => setModalVisible(true)}
@@ -276,6 +334,47 @@ const styles = StyleSheet.create({
     fontSize: 10,
     padding: 5,
     fontWeight: 'bold',
+  },
+  flatList: {
+    margin: 20,
+    flexDirection: 'row',
+    width: Dimensions.get('window').width - 50,
+  },
+  item: {
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    paddingHorizontal: 20,
+    paddingVertical: 8,
+    borderWidth: 3,
+    borderRadius: 35,
+    borderColor: '#FFC12D',
+    margin: 10,
+    shadowColor: '#000',
+    elevation: 5,
+    width: Dimensions.get('window').width - 80,
+  },
+  itemDataView: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: Dimensions.get('window').width - 325,
+  },
+  title: {
+    fontWeight: 'bold',
+    color: '#656565',
+  },
+  data: {
+    fontSize: 12,
+    fontWeight: '400',
+    color: '#656565',
+  },
+  noData: {
+    marginTop: 20,
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#656565',
   },
 });
 

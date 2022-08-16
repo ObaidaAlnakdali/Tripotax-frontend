@@ -24,8 +24,8 @@ function Drivers({navigation}) {
     if (text) {
       let newData = drivers.filter(driver => {
         if (
-          driver.fullName.toLowerCase().includes(text.toLowerCase())
-          // || driver?.city.toLowerCase().includes(text.toLowerCase())
+          driver?.fullName.toLowerCase().includes(text.toLowerCase()) ||
+          driver.city?.name.toLowerCase().includes(text.toLowerCase())
         ) {
           return driver;
         }

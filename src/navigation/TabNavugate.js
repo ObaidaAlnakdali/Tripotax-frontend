@@ -4,6 +4,7 @@ import UserDashboard from '../screens/user/UserDashboard';
 import Chat from '../screens/user/Chat';
 import Drivers from '../screens/user/Drivers';
 import DriverStackNavigate from './DriverStackNavigate';
+import OrderStackNavigation from './OrderStackNavigation';
 import {Text} from 'react-native';
 
 const Tab = createMaterialTopTabNavigator();
@@ -19,7 +20,7 @@ function TabNavugate() {
       }}>
       <Tab.Screen
         name="Order"
-        component={UserDashboard}
+        component={OrderStackNavigation}
         options={{tabBarLabel: 'Order'}}
       />
       <Tab.Screen

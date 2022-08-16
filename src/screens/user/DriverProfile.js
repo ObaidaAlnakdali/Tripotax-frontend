@@ -11,18 +11,55 @@ import {
   Dimensions,
   Platform,
   Linking,
+  Alert,
+  Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContext from '../../context/AuthContext';
 import axios from 'axios';
 
 export default function DriverProfile({navigation, route}) {
   const {id} = route.params;
+  const {IP} = useContext(AuthContext);
+
   const [driver, setDriver] = useState({});
   const [loading, setLoading] = useState(false);
-  const {IP} = useContext(AuthContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [defaultRaiting, setDefaultRaiting] = useState(2);
+  const [maxRaiting, setMaxRaiting] = useState([1, 2, 3, 4, 5]);
+
   const Image_Http_URL = {
     uri: `http://${IP}:8000/images/${driver?.personalImage}`,
+  };
+  const starImageFilled =
+    'https://raw.githubusercontent.com/tranhonghan/images/main/star_filled.png';
+  const starImageCorner =
+    'https://raw.githubusercontent.com/tranhonghan/images/main/star_corner.png';
+
+  const CustomeRaitingBar = () => {
+    return (
+      <View style={styles.customeRaitingBarStyle}>
+        {maxRaiting.map((item, key) => {
+          return (
+            <TouchableOpacity
+              activeOpacity={0.7}
+              key={item}
+              onPress={() => setDefaultRaiting(item)}>
+              <Image
+                style={styles.starImageStyle}
+                source={
+                  item <= defaultRaiting
+                    ? {uri: starImageFilled}
+                    : {uri: starImageCorner}
+                }
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+    );
   };
 
   const getDriver = () => {
@@ -47,6 +84,18 @@ export default function DriverProfile({navigation, route}) {
     Linking.openURL(phoneNumber);
   };
 
+  const addRate = async () => {
+    let userID = await AsyncStorage.getItem('id');
+    let form = {userId: userID, rate: defaultRaiting};
+    axios
+      .post(`http://${IP}:8000/api/driver/addRaiting/${id}`, form)
+      .then(res => {
+        console.log(res.data.response);
+        setModalVisible(!modalVisible);
+      })
+      .catch(err => console.log(err));
+  };
+
   useEffect(() => {
     getDriver();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,6 +103,33 @@ export default function DriverProfile({navigation, route}) {
 
   return (
     <SafeAreaView style={styles.Container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert('Modal has been closed.');
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Raiting</Text>
+            <CustomeRaitingBar />
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                style={styles.buttonAdd}
+                onPress={() => addRate()}>
+                <Text style={styles.textStyleButtonAdd}>Rate</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.buttonClose}
+                onPress={() => setModalVisible(!modalVisible)}>
+                <Text style={styles.textStyleButtonClose}>Close</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
       {!loading ? (
         <View style={styles.loading}>
           <ActivityIndicator size={'large'} color="#FFC12D" />
@@ -86,6 +162,15 @@ export default function DriverProfile({navigation, route}) {
                   size={18}
                   color="#FFC12D"
                 />
+              </View>
+              <View style={styles.rateIcon}>
+                <TouchableOpacity onPress={() => setModalVisible(true)}>
+                  <Icons
+                    name="card-account-details-star"
+                    size={25}
+                    color="#373737"
+                  />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={[styles.row, styles.seccond]}>
@@ -120,6 +205,10 @@ export default function DriverProfile({navigation, route}) {
               <View style={[styles.row, styles.details]}>
                 <Text style={styles.detailsTitle}>City</Text>
                 <Text style={styles.detailsContent}>{driver.city?.name}</Text>
+              </View>
+              <View style={[styles.row, styles.details]}>
+                <Text style={styles.detailsTitle}>Status</Text>
+                <Text style={styles.detailsContent}>{driver?.status}</Text>
               </View>
             </View>
             <View style={styles.end}>
@@ -177,21 +266,29 @@ const styles = StyleSheet.create({
     margin: 10,
     backgroundColor: '#fcfcfc',
     borderRadius: 35,
-    padding: 20,
+    padding: 18,
     alignItems: 'center',
     width: Dimensions.get('window').width - 80,
     shadowColor: '#000',
     elevation: 8,
+    position: 'relative',
+  },
+  rateIcon: {
+    position: 'absolute',
+    right: 20,
+    top: 20,
+    borderRadius: 100,
+    backgroundColor: '#FFC12D',
+    padding: 10,
   },
   image: {
-    height: 120,
-    width: 120,
+    height: 100,
+    width: 100,
     borderRadius: 100,
     marginBottom: 10,
   },
   firstTitle: {
-    fontSize: 20,
-    marginLeft: 20,
+    fontSize: 16,
     color: '#656565',
     fontWeight: '500',
   },
@@ -260,5 +357,68 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  buttonAdd: {
+    width: 80,
+    borderWidth: 2,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderColor: '#FFC12D',
+    marginTop: 15,
+    marginHorizontal: 5,
+  },
+  buttonClose: {
+    width: 80,
+    borderWidth: 2,
+    paddingHorizontal: 15,
+    paddingVertical: 5,
+    justifyContent: 'center',
+    borderRadius: 8,
+    borderColor: '#c11f1f',
+    marginTop: 15,
+    marginHorizontal: 5,
+  },
+  textStyleButtonAdd: {
+    color: '#FFC12D',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  textStyleButtonClose: {
+    color: '#c11f1f',
+    textAlign: 'center',
+  },
+  customeRaitingBarStyle: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    margin: 15,
+  },
+  starImageStyle: {
+    width: 30,
+    height: 30,
+    resizeMode: 'cover',
+    margin: 1,
   },
 });
