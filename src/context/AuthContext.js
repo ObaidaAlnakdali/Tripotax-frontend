@@ -84,7 +84,7 @@ export const AuthProvider = ({children}) => {
       axios
         .get(`http://${IP}:8000/api/${type}/${id}`)
         .then(res => {
-          console.log('user test', res.data.response);
+          //console.log('user test', res.data.response);
           setUserData(res.data.response);
         })
         .catch(err => console.log(err));

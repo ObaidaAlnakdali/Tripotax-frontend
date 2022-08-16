@@ -2,6 +2,7 @@ import React from 'react';
 import DriverDashboard from '../screens/driver/DriverDashboard';
 import Profile from '../screens/driver/Profile';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import DriverChatStack from './DriverChatStack';
 
 import CustomDrawer from '../components/CustomeDrower';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,7 +25,7 @@ function DriverStack() {
       }}>
       <Drawer.Screen
         name="Home"
-        component={DriverDashboard}
+        component={DriverChatStack}
         options={{
           drawerIcon: ({color}) => (
             <Ionicons name="home-outline" size={22} color={color} />

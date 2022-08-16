@@ -20,6 +20,7 @@ export default function Profile() {
   const [lastName, onChangeLastName] = useState(userData?.lastName);
   const [email, onChangeEmail] = useState(userData?.email);
   const [password, onChangePassword] = useState(userData?.password);
+  const [carModule, onCarModule] = useState('Mercedes-Benz E-Class');
 
   const countries = ['avilable', 'unavilable'];
 
@@ -35,9 +36,6 @@ export default function Profile() {
         <View style={styles.Container}>
           <View style={styles.firstPart}>
             <Image source={Image_Http_URL} style={styles.Image} />
-            <Text style={styles.textTitle}>{userData?.fullName}</Text>
-          </View>
-          <View style={styles.firstPart}>
             <Text style={styles.textTitle}>{userData?.fullName}</Text>
           </View>
           <View>
@@ -74,30 +72,14 @@ export default function Profile() {
               />
             </View>
             <View style={styles.inputField}>
-              <Text style={styles.inputTitle}>Email</Text>
+              <Text style={styles.inputTitle}>Car Module</Text>
               <TextInput
                 style={styles.inputTxt}
-                onChangeText={onChangeEmail}
-                value={email}
+                onChangeText={onCarModule}
+                value={carModule}
               />
             </View>
-            <View style={styles.inputField}>
-              <Text style={styles.inputTitle}>Email</Text>
-              <TextInput
-                style={styles.inputTxt}
-                onChangeText={onChangeEmail}
-                value={email}
-              />
-            </View>
-            <View style={styles.inputField}>
-              <Text style={styles.inputTitle}>Last name</Text>
-              <TextInput
-                style={styles.inputTxt}
-                onChangeText={onChangeFirstName}
-                value={lastName}
-              />
-            </View>
-            <SelectDropdown
+            {/* <SelectDropdown
               data={countries}
               onSelect={(selectedItem, index) => {
                 console.log(selectedItem, index);
@@ -108,7 +90,7 @@ export default function Profile() {
               rowTextForSelection={(item, index) => {
                 console.log(item);
               }}
-            />
+            /> */}
             <TouchableOpacity>
               <Text style={[styles.textOrang, {marginTop: 10, fontSize: 10}]}>
                 Change your password?

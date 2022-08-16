@@ -200,7 +200,7 @@ export default function DriverProfile({navigation, route}) {
               </View>
               <View style={[styles.row, styles.details]}>
                 <Text style={styles.detailsTitle}>Car Model</Text>
-                <Text style={styles.detailsContent}>Marcedes-Benz E-Class</Text>
+                <Text style={styles.detailsContent}>Mercedes-Benz E-Class</Text>
               </View>
               <View style={[styles.row, styles.details]}>
                 <Text style={styles.detailsTitle}>City</Text>
